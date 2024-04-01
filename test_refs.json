@@ -1,0 +1,422 @@
+[
+    {
+        "sent_ids": [
+            0,
+            1,
+            2
+        ],
+        "file_name": "COCO_train2014_000000581857_16.jpg",
+        "ann_id": 1719310,
+        "ref_id": 0,
+        "image_id": 581857,
+        "split": "train",
+        "sentences": [
+            {
+                "tokens": [
+                    "navy",
+                    "blue",
+                    "shirt"
+                ],
+                "raw": "navy blue shirt",
+                "sent_id": 0,
+                "sent": "navy blue shirt"
+            },
+            {
+                "tokens": [
+                    "woman",
+                    "back",
+                    "in",
+                    "blue"
+                ],
+                "raw": "woman back in blue",
+                "sent_id": 1,
+                "sent": "woman back in blue"
+            },
+            {
+                "tokens": [
+                    "blue",
+                    "shirt"
+                ],
+                "raw": "blue shirt",
+                "sent_id": 2,
+                "sent": "blue shirt"
+            }
+        ],
+        "category_id": 1
+    },
+    {
+        "sent_ids": [
+            3,
+            4,
+            5
+        ],
+        "file_name": "COCO_train2014_000000581857_0.jpg",
+        "ann_id": 463958,
+        "ref_id": 1,
+        "image_id": 581857,
+        "split": "train",
+        "sentences": [
+            {
+                "tokens": [
+                    "gray",
+                    "shirt",
+                    "wearing",
+                    "glasses"
+                ],
+                "raw": "grey shirt wearing glasses",
+                "sent_id": 3,
+                "sent": "gray shirt wearing glasses"
+            },
+            {
+                "tokens": [
+                    "lady",
+                    "with",
+                    "glasses"
+                ],
+                "raw": "lady with glasses",
+                "sent_id": 4,
+                "sent": "lady with glasses"
+            },
+            {
+                "tokens": [
+                    "woman",
+                    "with",
+                    "gray",
+                    "shirt",
+                    "standing",
+                    "next",
+                    "to",
+                    "man"
+                ],
+                "raw": "woman with grey shirt standing next to man",
+                "sent_id": 5,
+                "sent": "woman with gray shirt standing next to man"
+            }
+        ],
+        "category_id": 1
+    },
+    {
+        "sent_ids": [
+            6,
+            7,
+            8
+        ],
+        "file_name": "COCO_train2014_000000581839_2.jpg",
+        "ann_id": 495152,
+        "ref_id": 2,
+        "image_id": 581839,
+        "split": "train",
+        "sentences": [
+            {
+                "tokens": [
+                    "standing",
+                    "with",
+                    "racket"
+                ],
+                "raw": "standing with racket",
+                "sent_id": 6,
+                "sent": "standing with racket"
+            },
+            {
+                "tokens": [
+                    "woman",
+                    "standing"
+                ],
+                "raw": "woman standing",
+                "sent_id": 7,
+                "sent": "woman standing"
+            },
+            {
+                "tokens": [
+                    "holding",
+                    "raquet"
+                ],
+                "raw": "holding raquet",
+                "sent_id": 8,
+                "sent": "holding raquet"
+            }
+        ],
+        "category_id": 1
+    },
+    {
+        "sent_ids": [
+            9,
+            10
+        ],
+        "file_name": "COCO_train2014_000000581839_1.jpg",
+        "ann_id": 485695,
+        "ref_id": 3,
+        "image_id": 581839,
+        "split": "train",
+        "sentences": [
+            {
+                "tokens": [
+                    "woman",
+                    "sitting",
+                    "with",
+                    "leg",
+                    "extended"
+                ],
+                "raw": "woman sitting with leg extended",
+                "sent_id": 9,
+                "sent": "woman sitting with leg extended"
+            },
+            {
+                "tokens": [
+                    "ditting",
+                    "darker",
+                    "hair"
+                ],
+                "raw": "ditting darker hair",
+                "sent_id": 10,
+                "sent": "ditting darker hair"
+            }
+        ],
+        "category_id": 1
+    },
+    {
+        "sent_ids": [
+            11,
+            12,
+            13
+        ],
+        "file_name": "COCO_train2014_000000581789_1.jpg",
+        "ann_id": 453177,
+        "ref_id": 4,
+        "image_id": 581789,
+        "split": "train",
+        "sentences": [
+            {
+                "tokens": [
+                    "child",
+                    "with",
+                    "case",
+                    "on",
+                    "head"
+                ],
+                "raw": "child with case on head",
+                "sent_id": 11,
+                "sent": "child with case on head"
+            },
+            {
+                "tokens": [
+                    "holding",
+                    "a",
+                    "green",
+                    "object"
+                ],
+                "raw": "holding a green object",
+                "sent_id": 12,
+                "sent": "holding a green object"
+            },
+            {
+                "tokens": [
+                    "hand",
+                    "of",
+                    "person",
+                    "with",
+                    "red",
+                    "shirt"
+                ],
+                "raw": "hand of person with red shirt",
+                "sent_id": 13,
+                "sent": "hand of person with red shirt"
+            }
+        ],
+        "category_id": 1
+    },
+    {
+        "sent_ids": [
+            14,
+            15,
+            16
+        ],
+        "file_name": "COCO_train2014_000000581789_0.jpg",
+        "ann_id": 440706,
+        "ref_id": 5,
+        "image_id": 581789,
+        "split": "train",
+        "sentences": [
+            {
+                "tokens": [
+                    "guy",
+                    "in",
+                    "brown",
+                    "shirt"
+                ],
+                "raw": "guy in brown shirt",
+                "sent_id": 14,
+                "sent": "guy in brown shirt"
+            },
+            {
+                "tokens": [
+                    "man",
+                    "in",
+                    "brown"
+                ],
+                "raw": "man in brown",
+                "sent_id": 15,
+                "sent": "man in brown"
+            },
+            {
+                "tokens": [
+                    "man",
+                    "wearing",
+                    "long",
+                    "sleeves"
+                ],
+                "raw": "man wearing long sleeves",
+                "sent_id": 16,
+                "sent": "man wearing long sleeves"
+            }
+        ],
+        "category_id": 1
+    },
+    {
+        "sent_ids": [
+            17
+        ],
+        "file_name": "COCO_train2014_000000581766_2.jpg",
+        "ann_id": 1097431,
+        "ref_id": 6,
+        "image_id": 581766,
+        "split": "train",
+        "sentences": [
+            {
+                "tokens": [
+                    "urinal",
+                    "closest",
+                    "to",
+                    "the",
+                    "white",
+                    "pipe"
+                ],
+                "raw": "urinal closest to the white pipe",
+                "sent_id": 17,
+                "sent": "urinal closest to the white pipe"
+            }
+        ],
+        "category_id": 70
+    },
+    {
+        "sent_ids": [
+            18
+        ],
+        "file_name": "COCO_train2014_000000581766_0.jpg",
+        "ann_id": 1093269,
+        "ref_id": 7,
+        "image_id": 581766,
+        "split": "train",
+        "sentences": [
+            {
+                "tokens": [
+                    "pisser",
+                    "far",
+                    "rat"
+                ],
+                "raw": "pisser far Rat",
+                "sent_id": 18,
+                "sent": "pisser far rat"
+            }
+        ],
+        "category_id": 70
+    },
+    {
+        "sent_ids": [
+            19,
+            20,
+            21
+        ],
+        "file_name": "COCO_train2014_000000581739_2.jpg",
+        "ann_id": 1154905,
+        "ref_id": 8,
+        "image_id": 581739,
+        "split": "train",
+        "sentences": [
+            {
+                "tokens": [
+                    "vase",
+                    "holding",
+                    "tallest",
+                    "flower"
+                ],
+                "raw": "vase holding tallest flower",
+                "sent_id": 19,
+                "sent": "vase holding tallest flower"
+            },
+            {
+                "tokens": [
+                    "the",
+                    "vase",
+                    "with",
+                    "the",
+                    "tallest",
+                    "flower"
+                ],
+                "raw": "The vase with the tallest flower.",
+                "sent_id": 20,
+                "sent": "the vase with the tallest flower"
+            },
+            {
+                "tokens": [
+                    "no",
+                    "3"
+                ],
+                "raw": "no 3",
+                "sent_id": 21,
+                "sent": "no 3"
+            }
+        ],
+        "category_id": 86
+    },
+    {
+        "sent_ids": [
+            22,
+            23,
+            24
+        ],
+        "file_name": "COCO_train2014_000000581739_1.jpg",
+        "ann_id": 1152539,
+        "ref_id": 9,
+        "image_id": 581739,
+        "split": "train",
+        "sentences": [
+            {
+                "tokens": [
+                    "vase",
+                    "of",
+                    "flower",
+                    "drooping"
+                ],
+                "raw": "vase of flower drooping",
+                "sent_id": 22,
+                "sent": "vase of flower drooping"
+            },
+            {
+                "tokens": [
+                    "vase",
+                    "with",
+                    "wilted",
+                    "flower"
+                ],
+                "raw": "vase with wilted flower",
+                "sent_id": 23,
+                "sent": "vase with wilted flower"
+            },
+            {
+                "tokens": [
+                    "vase",
+                    "of",
+                    "the",
+                    "flower",
+                    "tilting",
+                    "over"
+                ],
+                "raw": "vase of the flower tilting over",
+                "sent_id": 24,
+                "sent": "vase of the flower tilting over"
+            }
+        ],
+        "category_id": 86
+    }
+]
