@@ -30,7 +30,7 @@ TEXT_ENCODER_PATH=bert-base-uncased
 
 CFG=config/cfg_odvg.py
 #DATASETS=config/datasets_od_test.json
-DATASETS=config/refcoco_test.json
+DATASETS=config/refcoco_test2.json
 OUTPUT_DIR=./logs
 
 python -u main.py --output_dir ${OUTPUT_DIR} \

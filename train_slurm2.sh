@@ -28,7 +28,7 @@ PRETRAIN_MODEL_PATH=/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/
 TEXT_ENCODER_PATH=bert-base-uncased
 
 CFG=config/cfg_odvg.py
-DATASETS=config/datasets_od_test.json
+DATASETS=config/refcoco_test.json
 OUTPUT_DIR=./logs
 
 python -u main.py --output_dir ${OUTPUT_DIR} \

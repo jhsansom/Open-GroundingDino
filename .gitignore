@@ -1,3 +1,7 @@
+logs/
+RefCOCO_3DS/
+image_with_rectangle.png
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
