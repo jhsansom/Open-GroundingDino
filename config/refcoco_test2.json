@@ -3,8 +3,8 @@
     {
       "root": "/home/jhsansom/Open-GroundingDino/RefCOCO_3DS/images",
       "anno": "/home/jhsansom/Open-GroundingDino/RefCOCO_3DS/instances.json",
-      "label_map": "/home/jhsansom/Open-GroundingDino/RefCOCO_3DS/coco2017_label_map.json",
-      "dataset_mode": "odvg"
+      "label_map": null,
+      "dataset_mode": "coco"
     }
   ],
   "val": [

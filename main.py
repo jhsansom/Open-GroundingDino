@@ -159,12 +159,16 @@ def main(args):
     param_dicts = get_param_dict(args, model_without_ddp)
     
     # freeze some layers
-    if args.freeze_keywords is not None:
-        for name, parameter in model.named_parameters():
-            for keyword in args.freeze_keywords:
-                if keyword in name:
-                    parameter.requires_grad_(False)
-                    break
+    frozen_params = [
+        "module.transformer.decoder",
+        "module.backbone",
+        "module.transformer.encoder.layers"
+    ]
+    for name, parameter in model.named_parameters():
+        for frozen_param in frozen_params:
+            if frozen_param in name:
+                parameter.requires_grad_(False)
+                break
     logger.info("params after freezing:\n"+json.dumps({n: p.numel() for n, p in model.named_parameters() if p.requires_grad}, indent=2))
 
     optimizer = torch.optim.AdamW(param_dicts, lr=args.lr,
