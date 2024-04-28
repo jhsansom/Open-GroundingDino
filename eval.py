@@ -1,11 +1,16 @@
 import os
 
 # Set the following:
-#WEIGHTS_PATH = "/home/jhsansom/Open-GroundingDino/logs/checkpoint0000.pth"
-WEIGHTS_PATH = "/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/model_weights/gdinot-1.8m-odvg.pth"
-PATH_TO_DATASET = '/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/refcoco_split/spatial' # no slash on end
-PATH_TO_DATASET_IMAGES =  "/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/refer_data/images/mscoco/images/train2014/COCO_train2014_000000" # images are named with their numbers.png, so they get appended to this
+WEIGHTS_PATH = "/home/jhsansom/Open-GroundingDino/logs/checkpoint0006.pth"
+#WEIGHTS_PATH = "/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/model_weights/gdinot-1.8m-odvg.pth"
 
+# Whether testing on real or synthetic
+if True:
+  PATH_TO_DATASET = '/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/synthetic_data/split_datasets/RefCOCO_3ds_7k/val'
+  PATH_TO_DATASET_IMAGES = '/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/synthetic_data/split_datasets/RefCOCO_3ds_7k/val/images/'
+else:
+  PATH_TO_DATASET = '/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/refcoco_split/spatial' # no slash on end
+  PATH_TO_DATASET_IMAGES =  "/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/refer_data/images/mscoco/images/train2014/COCO_train2014_000000" # images are named with their numbers.png, so they get appended to this
 
 # Rest of script
 import sys
@@ -56,31 +61,22 @@ print(f"Successfully Found {PATH_TO_DATASET_REFS_FILE}") if os.path.isfile(PATH_
 
 import json
 instances_file = open(PATH_TO_DATASET_INSTANCES_FILE)
-instnaces_dict = json.load(instances_file)
+instances_dict = json.load(instances_file)
 refs_file = open(PATH_TO_DATASET_REFS_FILE)
 refs_list = json.load(refs_file)
 
 # find mapping for image_name to annotation
 image_to_annotations_map = {}
-for anno_id, anno in enumerate(instnaces_dict["annotations"]):
- image_id = instnaces_dict["annotations"][anno_id]["image_id"]
+for anno_id, anno in enumerate(instances_dict["annotations"]):
+ image_id = instances_dict["annotations"][anno_id]["image_id"]
  if image_id in list(image_to_annotations_map.keys()):
   image_to_annotations_map[image_id].append(anno_id)
  else:
   image_to_annotations_map[image_id] = [anno_id]
 
-# CREATE MAPPING FOR IMAGE_ID TO ANNOTATION INDEX IN INSTANCES.JSON
-image_to_annotations_map = {}
-for anno_idx, anno in enumerate(instnaces_dict["annotations"]):
- image_id = instnaces_dict["annotations"][anno_idx]["image_id"]
- if image_id in list(image_to_annotations_map.keys()):
-  image_to_annotations_map[image_id].append(anno_idx)
- else:
-  image_to_annotations_map[image_id] = [anno_idx]
-
 # CREATE MAPPING FOR CATEGORY IDE TO CATEGORY NAME
 category_id_to_name_map = {}
-for category in instnaces_dict["categories"]:
+for category in instances_dict["categories"]:
   category_id_to_name_map[category["id"]] = category["name"]
 
 # CREATE MAPPING FOR ANNOTATION_ID TO ANNOTATION INDEX IN REFS.JSON
@@ -90,7 +86,7 @@ for ref_index, ref in enumerate(refs_list):
 
 # CREATE MAPPING FOR IMAGE_ID TO IMAGE INDEX IN INSTNACES.JSON
 image_id_to_instance_image_idx_map = {}
-for image_idx, image in enumerate(instnaces_dict["images"]):
+for image_idx, image in enumerate(instances_dict["images"]):
   image_id_to_instance_image_idx_map[image["id"]] = image_idx
 
 ###################################################################################
@@ -101,7 +97,7 @@ import torch
 import copy
 from tqdm import tqdm
 
-img_h, img_w = [instnaces_dict["images"][0]["height"],instnaces_dict["images"][0]["width"]]
+img_h, img_w = [instances_dict["images"][0]["height"],instances_dict["images"][0]["width"]]
 images_in_dataset = list(image_to_annotations_map.keys())
 
 # loop through all images in specified dataset
@@ -117,7 +113,7 @@ for image_id in tqdm(images_in_dataset):
   for bbox_index, anno_id in enumerate(image_to_annotations_map[image_id]):
 
     # convert pixel bounding box (xmin, ymin, w, h) to percentage bounding box (xcenter,ycenter,w,h)
-    bbox_pix = instnaces_dict["annotations"][anno_id]["bbox"]
+    bbox_pix = instances_dict["annotations"][anno_id]["bbox"]
     bbox_pix_shifted = copy.deepcopy(bbox_pix)
     bbox_pix_shifted[0] += bbox_pix_shifted[2]/2
     bbox_pix_shifted[1] += bbox_pix_shifted[3]/2
@@ -125,7 +121,7 @@ for image_id in tqdm(images_in_dataset):
     boxes[bbox_index,:] = bbox_per
 
 
-    phrases.append(str(instnaces_dict["annotations"][anno_id]["category_id"])) # for visualization
+    phrases.append(str(instances_dict["annotations"][anno_id]["category_id"])) # for visualization
 
   logits = torch.zeros(num_annotations) # for visualization
 
@@ -156,7 +152,7 @@ BOX_TRESHOLD = 0.10 # 35
 TEXT_TRESHOLD = 0.10  #25
 
 
-img_h, img_w = [instnaces_dict["images"][0]["height"],instnaces_dict["images"][0]["width"]]
+img_h, img_w = [instances_dict["images"][0]["height"],instances_dict["images"][0]["width"]]
 images_in_dataset = list(image_to_annotations_map.keys())
 
 # loop through all images in specified dataset
@@ -174,7 +170,7 @@ for iamge_count, image_id in enumerate(tqdm(images_in_dataset[0:NUM_IMAGES])):
 
     # find the ground truth bounding box
     # convert pixel bounding box (xmin, ymin, w, h) to percentage bounding box (xcenter,ycenter,w,h)
-    bbox_pix = instnaces_dict["annotations"][anno_id]["bbox"]
+    bbox_pix = instances_dict["annotations"][anno_id]["bbox"]
     bbox_pix_shifted = copy.deepcopy(bbox_pix)
     bbox_pix_shifted[0] += bbox_pix_shifted[2]/2
     bbox_pix_shifted[1] += bbox_pix_shifted[3]/2
@@ -223,7 +219,7 @@ BOX_TRESHOLD = 0.10 # 35
 TEXT_TRESHOLD = 0.10  #25
 
 
-img_h, img_w = [instnaces_dict["images"][0]["height"],instnaces_dict["images"][0]["width"]]
+img_h, img_w = [instances_dict["images"][0]["height"],instances_dict["images"][0]["width"]]
 
 def convert_pix_coords_to_absolute_pixels(bbox,img_w,img_h):
   bbox[0] *= img_w
@@ -255,8 +251,8 @@ for image_id in tqdm(images_in_dataset): # TODO: Specify images for debugging
 
   num_annotations = len(image_to_annotations_map[image_id]) # number of annotations for image
 
-  img_h = instnaces_dict["images"][image_id_to_instance_image_idx_map[image_id]]['height']
-  img_w = instnaces_dict["images"][image_id_to_instance_image_idx_map[image_id]]['width']
+  img_h = instances_dict["images"][image_id_to_instance_image_idx_map[image_id]]['height']
+  img_w = instances_dict["images"][image_id_to_instance_image_idx_map[image_id]]['width']
 
   # loop through all ground truth bounding boxes for the image
   # for bbox_index, anno_id in enumerate(image_to_annotations_map[image_id]):
@@ -264,7 +260,7 @@ for image_id in tqdm(images_in_dataset): # TODO: Specify images for debugging
 
     # find the ground truth bounding box
     # convert pixel bounding box (xmin, ymin, w, h) to percentage bounding box (xcenter,ycenter,w,h)
-    bbox_pix = instnaces_dict["annotations"][anno_id]["bbox"]
+    bbox_pix = instances_dict["annotations"][anno_id]["bbox"]
     bbox_pix_shifted = copy.deepcopy(bbox_pix)
     bbox_pix_shifted[0] += bbox_pix_shifted[2]/2
     bbox_pix_shifted[1] += bbox_pix_shifted[3]/2
