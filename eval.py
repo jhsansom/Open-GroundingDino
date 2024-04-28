@@ -1,11 +1,18 @@
 import os
 
+# Set the following:
+#WEIGHTS_PATH = "/home/jhsansom/Open-GroundingDino/logs/checkpoint0000.pth"
+WEIGHTS_PATH = "/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/model_weights/gdinot-1.8m-odvg.pth"
+PATH_TO_DATASET = '/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/refcoco_split/spatial' # no slash on end
+PATH_TO_DATASET_IMAGES =  "/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/refer_data/images/mscoco/images/train2014/COCO_train2014_000000" # images are named with their numbers.png, so they get appended to this
+
+
+# Rest of script
 import sys
 sys.path.insert(0,'/home/jhsansom/Open-GroundingDino/GroundingDINO/')
 
 # TODO: Specify weights .pth file
 HOME = "/home/jhsansom/Open-GroundingDino/"
-WEIGHTS_PATH = "/home/jhsansom/Open-GroundingDino/logs_train0/checkpoint0000.pth"
 
 CONFIG_PATH = os.path.join(HOME, "GroundingDINO/groundingdino/config/GroundingDINO_SwinT_OGC.py")
 print("\n",CONFIG_PATH, "; exist:", os.path.isfile(CONFIG_PATH))
@@ -30,13 +37,12 @@ model = load_model(CONFIG_PATH, WEIGHTS_PATH, device=DEVICE)
 # ---> /images
 # ---> instances.json
 # ---> refs.json
-PATH_TO_DATASET = '/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/refcoco_split/valid_annotations'  # if using Google Colab
+  # if using Google Colab
 # PATH_TO_DATASET = os.getcwd() + "/test" # IF /test IS IN HOME DIRECTORY
 
 ###################################################################################
 ###################################################################################
 
-PATH_TO_DATASET_IMAGES =  "/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/refer_data/images/mscoco/images/train2014/COCO_train2014_000000"
 PATH_TO_DATASET_INSTANCES_FILE =   PATH_TO_DATASET + "/instances.json"
 PATH_TO_DATASET_REFS_FILE =   PATH_TO_DATASET + "/refs.json"
 
@@ -201,40 +207,6 @@ for iamge_count, image_id in enumerate(tqdm(images_in_dataset[0:NUM_IMAGES])):
 
 ###################################################################################
 ###################################################################################
-'''
-import os
-import supervision as sv
-
-# TODO: Specify image,
-IMAGE_NAME = "000006.png"
-TEXT_PROMPT = "baseball bat"
-BOX_TRESHOLD = 0.10 # 35
-TEXT_TRESHOLD = 0.10  #25
-
-
-IMAGE_PATH = os.path.join(HOME, "data",PATH_TO_DATASET_IMAGES, IMAGE_NAME)
-IMAGE_PATH =
-image_source, image = load_image(IMAGE_PATH)
-boxes, logits, phrases = predict(
-    model=model,
-    image=image,
-    caption=TEXT_PROMPT,
-    box_threshold=BOX_TRESHOLD,
-    text_threshold=TEXT_TRESHOLD,
-    device = DEVICE
-)
-
-print("="*30)
-print(boxes)
-print(logits.shape)
-print(len(phrases))
-print("="*30)
-annotated_frame = annotate(image_source=image_source, boxes=boxes, logits=logits, phrases=phrases)
-
-sv.plot_image(annotated_frame, (16, 16))
-'''
-###################################################################################
-###################################################################################
 
 
 import torch
@@ -276,7 +248,7 @@ images_in_dataset = list(image_to_annotations_map.keys())
 
 # loop through all images in specified dataset
 #for image_id in tqdm(images_in_dataset):
-for image_id in tqdm(images_in_dataset[0:100]): # TODO: Specify images for debugging
+for image_id in tqdm(images_in_dataset): # TODO: Specify images for debugging
 
   IMAGE_NAME = str(image_id).zfill(6) + ".jpg"
   IMAGE_PATH = PATH_TO_DATASET_IMAGES + IMAGE_NAME

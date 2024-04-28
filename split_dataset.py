@@ -101,6 +101,16 @@ class DatasetSplitter:
 
         self.refs_data = refs
 
+    def get_image_with_anns(self):
+        valid_image_ids = [a['id'] for a in self.instances_data['annotations']]
+
+        images = []
+        for image in tqdm.tqdm(self.instances_data['images']):
+            if image['id'] in valid_image_ids:
+                images.append(image)
+    
+        self.instances_data['images'] = images
+
 
     # Restrict annotations to those with corresponding references
     def get_ann_w_refs(self):
@@ -151,5 +161,6 @@ if __name__ == '__main__':
     #ds.print_dataset_statistics()
     #ds.get_tvt_split('train')
     #ds.get_random_subset(5000)
+    ds.get_image_with_anns()
     ds.print_dataset_statistics()
     ds.save_data()

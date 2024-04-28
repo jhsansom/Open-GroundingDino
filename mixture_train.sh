@@ -9,7 +9,7 @@
 #SBATCH --mem-per-cpu=50g
 #SBATCH --gres=gpu:1
 #SBATCH --time=08:00:00
-#SBATCH --account=eecs545w24_class
+#SBATCH --account=chaijy2
 #SBATCH --partition=spgpu
 #SBATCH --output=./jobs/%u/%x-%j.log
 
@@ -24,7 +24,7 @@ cd models/GroundingDINO/ops
 #python test.py
 cd ../../..
 
-PRETRAIN_MODEL_PATH=/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/model_weights/dinot-1.8m-odvg.pth
+PRETRAIN_MODEL_PATH=/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/model_weights/gdinot-1.8m-odvg.pth
 TEXT_ENCODER_PATH=bert-base-uncased
 
 CFG=config/cfg_odvg.py

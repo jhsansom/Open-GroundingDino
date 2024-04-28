@@ -8,7 +8,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --mem-per-cpu=30g
 #SBATCH --gres=gpu:1
-#SBATCH --time=00:30:00
+#SBATCH --time=03:00:00
 #SBATCH --account=eecs545w24_class
 #SBATCH --partition=spgpu
 #SBATCH --output=./jobs/%u/%x-%j.log
