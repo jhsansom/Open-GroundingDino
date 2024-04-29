@@ -2,8 +2,8 @@ import os
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--spatial', type=bool)
-parser.add_argument('--real', type=bool)
+parser.add_argument('--spatial', action='store_true')
+parser.add_argument('--real', action='store_true')
 parser.add_argument('--weights', type=str)
 
 args = parser.parse_args()
@@ -123,7 +123,8 @@ img_h, img_w = [instances_dict["images"][0]["height"],instances_dict["images"][0
 images_in_dataset = list(image_to_annotations_map.keys())
 
 # loop through all images in specified dataset
-for image_id in tqdm(images_in_dataset):
+#for image_id in tqdm(images_in_dataset):
+for image_id in images_in_dataset:
 
   num_annotations = len(image_to_annotations_map[image_id]) # number of annotations for image
 
@@ -266,7 +267,8 @@ images_in_dataset = list(image_to_annotations_map.keys())
 
 # loop through all images in specified dataset
 #for image_id in tqdm(images_in_dataset):
-for image_id in tqdm(images_in_dataset): # TODO: Specify images for debugging
+#for image_id in tqdm(images_in_dataset): # TODO: Specify images for debugging
+for image_id in images_in_dataset:
 
   IMAGE_NAME = str(image_id).zfill(6) + FILE_EXTENSION
   IMAGE_PATH = PATH_TO_DATASET_IMAGES + IMAGE_NAME
