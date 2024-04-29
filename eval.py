@@ -24,6 +24,7 @@ WEIGHTS_PATH = args.weights
 if args.real:
   PATH_TO_DATASET = '/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/synthetic_data/split_datasets/RefCOCO_3ds_7k/val'
   PATH_TO_DATASET_IMAGES = '/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/synthetic_data/split_datasets/RefCOCO_3ds_7k/val/images/'
+  FILE_EXTENSION = '.png'
 else:
   if args.spatial:
     spatial_str = ''
@@ -31,13 +32,14 @@ else:
     spatial_str = 'non'
   PATH_TO_DATASET = '/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/refcoco_split/' + spatial_str + 'spatial' # no slash on end
   PATH_TO_DATASET_IMAGES =  "/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/refer_data/images/mscoco/images/train2014/COCO_train2014_000000" # images are named with their numbers.png, so they get appended to this
+  FILE_EXTENSION = '.jpg'
 
 # Rest of script
 import sys
-sys.path.insert(0,'/home/jhsansom/Open-GroundingDino/GroundingDINO/')
+sys.path.insert(0,'./GroundingDINO/')
 
 # TODO: Specify weights .pth file
-HOME = "/home/jhsansom/Open-GroundingDino/"
+HOME = "."
 
 CONFIG_PATH = os.path.join(HOME, "GroundingDINO/groundingdino/config/GroundingDINO_SwinT_OGC.py")
 print("\n",CONFIG_PATH, "; exist:", os.path.isfile(CONFIG_PATH))
@@ -151,7 +153,7 @@ for image_id in tqdm(images_in_dataset):
 # VISUALIZE THE GROUND TRUTH BOUNDING BOXES AND CATEGORY ID'S FOR THE LAST IMAGE THAT WE LOOPED THROUGH IMAGE
 import supervision as sv
 
-IMAGE_NAME = str(image_id).zfill(6) + ".jpg"
+IMAGE_NAME = str(image_id).zfill(6) + FILE_EXTENSION
 IMAGE_PATH = PATH_TO_DATASET_IMAGES + IMAGE_NAME
 image_source, image = load_image(IMAGE_PATH)
 annotated_frame = annotate(image_source=image_source, boxes=boxes, logits=logits, phrases=phrases)
@@ -178,7 +180,7 @@ images_in_dataset = list(image_to_annotations_map.keys())
 # loop through all images in specified dataset
 for iamge_count, image_id in enumerate(tqdm(images_in_dataset[0:NUM_IMAGES])):
 
-  IMAGE_NAME = str(image_id).zfill(6) + ".jpg"
+  IMAGE_NAME = str(image_id).zfill(6) + FILE_EXTENSION
   IMAGE_PATH = PATH_TO_DATASET_IMAGES + IMAGE_NAME
 
   num_annotations = len(image_to_annotations_map[image_id]) # number of annotations for image
@@ -266,7 +268,7 @@ images_in_dataset = list(image_to_annotations_map.keys())
 #for image_id in tqdm(images_in_dataset):
 for image_id in tqdm(images_in_dataset): # TODO: Specify images for debugging
 
-  IMAGE_NAME = str(image_id).zfill(6) + ".jpg"
+  IMAGE_NAME = str(image_id).zfill(6) + FILE_EXTENSION
   IMAGE_PATH = PATH_TO_DATASET_IMAGES + IMAGE_NAME
 
   num_annotations = len(image_to_annotations_map[image_id]) # number of annotations for image
