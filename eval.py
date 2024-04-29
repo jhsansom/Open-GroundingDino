@@ -1,21 +1,31 @@
 import os
+import argparse
 
-# Change the following
-WEIGHTS_PATH = "/home/jhsansom/Open-GroundingDino/logs/checkpoint0006.pth"
-#WEIGHTS_PATH = "/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/model_weights/gdinot-1.8m-odvg.pth" # <---- original weights
-REAL_OR_SYNTHETIC = False # false for synthetic, true for real
-SPATIAL_OR_NONSPATIAL = False # false for nonspatial, true for spatial
+parser = argparse.ArgumentParser()
+parser.add_argument('--spatial', type=bool)
+parser.add_argument('--real', type=bool)
+parser.add_argument('--weights', type=str)
+
+args = parser.parse_args()
+
+print('='*100)
+print(f'Weights path = {args.weights}')
+print(f'Ran on real data = {args.real}')
+print(f'Ran on spatial split = {args.spatial}')
+print('='*100)
+
+WEIGHTS_PATH = args.weights
 
 ###################################################################################
 # NO CHANGES REQUIRED BELOW
 ###################################################################################
 
 # Whether testing on real or synthetic
-if REAL_OR_SYNTHETIC:
+if args.real:
   PATH_TO_DATASET = '/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/synthetic_data/split_datasets/RefCOCO_3ds_7k/val'
   PATH_TO_DATASET_IMAGES = '/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/synthetic_data/split_datasets/RefCOCO_3ds_7k/val/images/'
 else:
-  if SPATIAL_OR_NONSPATIAL:
+  if args.spatial:
     spatial_str = ''
   else:
     spatial_str = 'non'
