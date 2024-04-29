@@ -282,7 +282,7 @@ def main(args):
     best_map_holder = BestMetricHolder(use_ema=False)
 
     optpar_dict, fisher_dict = None, None
-    ewc = True
+    ewc = False
     if ewc is True:
         optpar_dict, fisher_dict = fisher_calc(model, criterion, postprocessors, data_loader_val, optimizer, base_ds, device, output_dir, wo_class_error=wo_class_error, args=args, logger=(logger if args.save_log else None))
 
