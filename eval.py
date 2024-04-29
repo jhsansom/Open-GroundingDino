@@ -5,7 +5,7 @@ WEIGHTS_PATH = "/home/jhsansom/Open-GroundingDino/logs/checkpoint0006.pth"
 #WEIGHTS_PATH = "/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/model_weights/gdinot-1.8m-odvg.pth"
 
 # Whether testing on real or synthetic
-if True:
+if False:
   PATH_TO_DATASET = '/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/synthetic_data/split_datasets/RefCOCO_3ds_7k/val'
   PATH_TO_DATASET_IMAGES = '/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/synthetic_data/split_datasets/RefCOCO_3ds_7k/val/images/'
 else:
