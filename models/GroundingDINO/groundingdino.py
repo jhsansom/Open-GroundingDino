@@ -522,7 +522,7 @@ class SetCriterion(nn.Module):
         assert loss in loss_map, f'do you really want to compute {loss} loss?'
         return loss_map[loss](outputs, targets, indices, num_boxes, **kwargs)
 
-    def forward(self, outputs, targets, cat_list, caption, return_indices=False):
+    def forward(self, outputs, targets, cat_list, caption, return_indices=False, ewc_loss=None):
         """ This performs the loss computation.
         Parameters:
              outputs: dict of tensors, see the output specification of the model for the format
@@ -579,7 +579,8 @@ class SetCriterion(nn.Module):
         losses = {}
         for loss in self.losses:
             losses.update(self.get_loss(loss, outputs, targets, indices, num_boxes))
-
+        if ewc_loss:
+            losses["ewc_loss"] = ewc_loss
         # In case of auxiliary losses, we repeat this process with the output of each intermediate layer.
         if 'aux_outputs' in outputs:
             for idx, aux_outputs in enumerate(outputs['aux_outputs']):
@@ -647,7 +648,7 @@ class PostProcess(nn.Module):
         self.tokenizer = get_tokenlizer.get_tokenlizer(text_encoder_type)
         if args.use_coco_eval:
             from pycocotools.coco import COCO
-            coco = COCO(args.coco_val_path)
+            coco = COCO("/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/refer_data/refcoco/instances.json")
             category_dict = coco.loadCats(coco.getCatIds())
             cat_list = [item['name'] for item in category_dict]
         else:
@@ -763,6 +764,7 @@ def build_groundingdino(args):
     # prepare weight dict
     weight_dict = {'loss_ce': args.cls_loss_coef, 'loss_bbox': args.bbox_loss_coef}
     weight_dict['loss_giou'] = args.giou_loss_coef
+    weight_dict['loss_ewc'] = args.ewc_loss_coef
     clean_weight_dict_wo_dn = copy.deepcopy(weight_dict)
 
     
@@ -786,6 +788,7 @@ def build_groundingdino(args):
             'loss_ce': 1.0,
             'loss_bbox': 1.0 if not no_interm_box_loss else 0.0,
             'loss_giou': 1.0 if not no_interm_box_loss else 0.0,
+            'loss_ewc': 1.0
         }
         try:
             interm_loss_coef = args.interm_loss_coef

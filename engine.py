@@ -5,6 +5,7 @@ Train and eval functions used in main.py
 
 import math
 import os
+import pickle
 import sys
 from typing import Iterable
 
@@ -21,7 +22,8 @@ from datasets.panoptic_eval import PanopticEvaluator
 def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
                     data_loader: Iterable, optimizer: torch.optim.Optimizer,
                     device: torch.device, epoch: int, max_norm: float = 0, 
-                    wo_class_error=False, lr_scheduler=None, args=None, logger=None):
+                    wo_class_error=False, lr_scheduler=None, args=None, logger=None,
+                    optpar_dict=None, fisher_dict=None):
     scaler = torch.cuda.amp.GradScaler(enabled=args.amp)
 
 
@@ -45,7 +47,12 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
         targets = [{k: v.to(device) for k, v in t.items() if torch.is_tensor(v)} for t in targets]
         with torch.cuda.amp.autocast(enabled=args.amp):
             outputs = model(samples, captions=captions)
-            loss_dict = criterion(outputs, targets, cap_list, captions)
+            # Need to add a function that gets the current params and their grads
+            loss = 0
+            for name, param in model.named_parameters():
+                if param.requires_grad:
+                    loss += (fisher_dict[name]*(param - optpar_dict[name]).pow(2)).sum()
+            loss_dict = criterion(outputs, targets, cap_list, captions, ewc_loss=loss)
 
             weight_dict = criterion.weight_dict
 
@@ -278,4 +285,112 @@ def evaluate(model, criterion, postprocessors, data_loader, base_ds, device, out
 
     return stats, coco_evaluator
 
+def fisher_calc(model, criterion, postprocessors, data_loader, optimizer, base_ds, device, output_dir, wo_class_error=False, args=None, logger=None):
+    exists = os.path.exists("/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/f_weights/fish_weight.pkl")
+    if exists:
+        with open("/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/f_weights/fish_weight.pkl", "rb") as fish_handle:
+            fisher_dict = pickle.load(fish_handle)
+        with open("/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/f_weights/pars_weight.pkl", "rb") as par_handle:
+            optpar_dict = pickle.load(par_handle)
+        return optpar_dict, fisher_dict
 
+    scaler = torch.cuda.amp.GradScaler(enabled=args.amp)
+    model.eval()
+    criterion.eval()
+
+    fisher_dict = {}
+    optpar_dict = {}
+
+    metric_logger = utils.MetricLogger(delimiter="  ")
+    if not wo_class_error:
+        metric_logger.add_meter('class_error', utils.SmoothedValue(window_size=1, fmt='{value:.2f}'))
+    header = 'Test:'
+
+    iou_types = tuple(k for k in ('segm', 'bbox') if k in postprocessors.keys())
+    useCats = True
+    try:
+        useCats = args.useCats
+    except:
+        useCats = True
+    if not useCats:
+        print("useCats: {} !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!".format(useCats))
+    
+    coco_evaluator = CocoGroundingEvaluator(base_ds, iou_types, useCats=useCats)
+
+
+    panoptic_evaluator = None
+    if 'panoptic' in postprocessors.keys():
+        panoptic_evaluator = PanopticEvaluator(
+            data_loader.dataset.ann_file,
+            data_loader.dataset.ann_folder,
+            output_dir=os.path.join(output_dir, "panoptic_eval"),
+        )
+
+    _cnt = 0
+    output_state_dict = {} # for debug only
+
+    if args.use_coco_eval:
+        from pycocotools.coco import COCO
+        coco = COCO("/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/refer_data/refcoco/instances.json")
+
+        # 获取所有类别
+        category_dict = coco.loadCats(coco.getCatIds())
+        cat_list = [item['name'] for item in category_dict]
+    else:
+        cat_list=args.label_list
+    caption = " . ".join(cat_list) + ' .'
+    print("Input text prompt:", caption)
+
+    for samples, targets in metric_logger.log_every(data_loader, 10, header, logger=logger):
+
+        samples = samples.to(device)
+        captions = [t["caption"] for t in targets]
+        cap_list = [t["cap_list"] for t in targets]
+        targets = [{k: v.to(device) for k, v in t.items() if torch.is_tensor(v)} for t in targets]
+        with torch.cuda.amp.autocast(enabled=args.amp):
+            outputs = model(samples, captions=captions)
+            # Need to add a function that gets the current params and their grads
+            loss_dict = criterion(outputs, targets, cap_list, captions)
+
+            weight_dict = criterion.weight_dict
+
+            losses = sum(loss_dict[k] * weight_dict[k] for k in loss_dict.keys() if k in weight_dict)
+        # reduce losses over all GPUs for logging purposes
+        loss_dict_reduced = utils.reduce_dict(loss_dict)
+        loss_dict_reduced_unscaled = {f'{k}_unscaled': v
+                                      for k, v in loss_dict_reduced.items()}
+        loss_dict_reduced_scaled = {k: v * weight_dict[k]
+                                    for k, v in loss_dict_reduced.items() if k in weight_dict}
+        losses_reduced_scaled = sum(loss_dict_reduced_scaled.values())
+
+        loss_value = losses_reduced_scaled.item()
+
+        if not math.isfinite(loss_value):
+            print("Loss is {}, stopping training".format(loss_value))
+            print(loss_dict_reduced)
+            sys.exit(1)
+
+        # amp backward function
+        if args.amp:
+            optimizer.zero_grad()
+            scaler.scale(losses).backward()
+        else:
+            # original backward function
+            optimizer.zero_grad()
+            losses.backward()
+
+        for name, param in model.named_parameters():
+            if param.requires_grad:
+                optpar_dict[name] = param.data.clone()
+                fisher_dict[name] = param.grad.data.clone().pow(2)
+        
+        if args.amp:
+            optimizer.zero_grad()
+        else:
+            # original backward function
+            optimizer.zero_grad()
+    with open("/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/f_weights/fish_weight.pkl", 'wb') as fish_file:
+        pickle.dump(fisher_dict, fish_file)
+    with open("/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/f_weights/pars_weight.pkl", 'wb') as opt_file:
+        pickle.dump(optpar_dict, opt_file)
+    return optpar_dict, fisher_dict
