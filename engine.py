@@ -50,7 +50,7 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
             # Need to add a function that gets the current params and their grads
             loss = 0
             for name, param in model.named_parameters():
-                if param.requires_grad:
+                if param.requires_grad and name in fisher_dict and name in optpar_dict:
                     loss += (fisher_dict[name]*(param - optpar_dict[name]).pow(2)).sum()
             loss_dict = criterion(outputs, targets, cap_list, captions, ewc_loss=loss)
 
@@ -281,8 +281,6 @@ def evaluate(model, criterion, postprocessors, data_loader, base_ds, device, out
         stats['PQ_th'] = panoptic_res["Things"]
         stats['PQ_st'] = panoptic_res["Stuff"]
 
-
-
     return stats, coco_evaluator
 
 def fisher_calc(model, criterion, postprocessors, data_loader, optimizer, base_ds, device, output_dir, wo_class_error=False, args=None, logger=None):
@@ -292,6 +290,8 @@ def fisher_calc(model, criterion, postprocessors, data_loader, optimizer, base_d
             fisher_dict = pickle.load(fish_handle)
         with open("/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/f_weights/pars_weight.pkl", "rb") as par_handle:
             optpar_dict = pickle.load(par_handle)
+        for name in fisher_dict:
+            print(name)
         return optpar_dict, fisher_dict
 
     scaler = torch.cuda.amp.GradScaler(enabled=args.amp)

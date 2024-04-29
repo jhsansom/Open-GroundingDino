@@ -1,0 +1,18 @@
+{
+  "train": [
+    {
+      "root": "/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/synthetic_data/split_datasets/RefCOCO_3ds_7k/train/images",
+      "anno": "/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/synthetic_data/split_datasets/RefCOCO_3ds_7k/train/instances_odvg.json",
+      "label_map": "/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/open_coco_data/coco2017_label_map.json",
+      "dataset_mode": "odvg"
+    }
+  ],
+  "val": [
+    {
+      "root": "/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/refer_data/images/mscoco/images/train2014/",
+      "anno": "/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/refcoco/refcoco/instances_odvg.json",
+      "label_map": "/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/open_coco_data/coco2017_label_map.json",
+      "dataset_mode": "odvg"
+    }
+  ]
+}
