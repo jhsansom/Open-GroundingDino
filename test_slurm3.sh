@@ -9,11 +9,11 @@
 #SBATCH --mem-per-cpu=30g
 #SBATCH --gres=gpu:1
 #SBATCH --time=00:30:00
-#SBATCH --account=chaijy2
+#SBATCH --account=eecs545w24_class
 #SBATCH --partition=spgpu
 #SBATCH --output=./jobs/%u/%x-%j.log
 
-module load cuda
+# module load cuda
 source ../cleanrl-env/bin/activate
 cd models/GroundingDINO/ops
 
@@ -29,6 +29,7 @@ cd ../../..
 #PRETRAIN_MODEL_PATH=/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/model_weights/groundingdino_swinb_cogcoor.pth.1
 #PRETRAIN_MODEL_PATH=/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/model_checkpoints/checkpoint0002.pth
 PRETRAIN_MODEL_PATH=/home/jhsansom/Open-GroundingDino/logs/checkpoint0002.pth
+PRETRAIN_MODEL_PATH=/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/model_checkpoints/checkpoint0003.pth
 TEXT_ENCODER_PATH=bert-base-uncased
 
 CFG=config/cfg_odvg.py

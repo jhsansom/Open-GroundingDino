@@ -96,6 +96,7 @@ cls_loss_coef = 2.0
 bbox_loss_coef = 5.0
 giou_loss_coef = 2.0
 enc_loss_coef = 1.0
+ewc_loss_coef = 1.0
 interm_loss_coef = 1.0
 no_interm_box_loss = False
 mask_loss_coef = 1.0

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=test_job_eecs545
-#SBATCH --mail-user=jhsansom@umich.edu
+#SBATCH --mail-user=adivasu@umich.edu
 #SBATCH --mail-type=END
 #SBATCH --cpus-per-task=1
 #SBATCH --nodes=1
@@ -13,7 +13,7 @@
 #SBATCH --partition=spgpu
 #SBATCH --output=./jobs/%u/%x-%j.log
 
-module load cuda
+# module load cuda
 source ../cleanrl-env/bin/activate
 cd models/GroundingDINO/ops
 
@@ -29,6 +29,7 @@ TEXT_ENCODER_PATH=bert-base-uncased
 
 CFG=config/cfg_odvg.py
 DATASETS=config/refcoco_test6.json
+# DATASETS=config/refcoco_test3.json
 OUTPUT_DIR=./logs
 
 # Watch this line: it's dangerous
