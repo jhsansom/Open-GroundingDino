@@ -1,15 +1,25 @@
 import os
 
-# Set the following:
+# Change the following
 WEIGHTS_PATH = "/home/jhsansom/Open-GroundingDino/logs/checkpoint0006.pth"
-#WEIGHTS_PATH = "/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/model_weights/gdinot-1.8m-odvg.pth"
+#WEIGHTS_PATH = "/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/model_weights/gdinot-1.8m-odvg.pth" # <---- original weights
+REAL_OR_SYNTHETIC = False # false for synthetic, true for real
+SPATIAL_OR_NONSPATIAL = False # false for nonspatial, true for spatial
+
+###################################################################################
+# NO CHANGES REQUIRED BELOW
+###################################################################################
 
 # Whether testing on real or synthetic
-if False:
+if REAL_OR_SYNTHETIC:
   PATH_TO_DATASET = '/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/synthetic_data/split_datasets/RefCOCO_3ds_7k/val'
   PATH_TO_DATASET_IMAGES = '/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/synthetic_data/split_datasets/RefCOCO_3ds_7k/val/images/'
 else:
-  PATH_TO_DATASET = '/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/refcoco_split/spatial' # no slash on end
+  if SPATIAL_OR_NONSPATIAL:
+    spatial_str = ''
+  else:
+    spatial_str = 'non'
+  PATH_TO_DATASET = '/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/refcoco_split/' + spatial_str + 'spatial' # no slash on end
   PATH_TO_DATASET_IMAGES =  "/scratch/eecs545w24_class_root/eecs545w24_class/shared_data/dinosaur/refer_data/images/mscoco/images/train2014/COCO_train2014_000000" # images are named with their numbers.png, so they get appended to this
 
 # Rest of script
